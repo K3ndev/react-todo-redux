@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ModalLogin, Sidebar } from "./shared/components/index";
 import { RootState } from "./shared/store/todoStore";
+import { addName, allCategory } from "./shared/store/feutures/reservationSlice";
 
 function App() {
   // RootState is typescript thing
@@ -14,6 +15,7 @@ function App() {
   const day = format(date, "iiii");
   const month = format(date, "MMM");
   const dayNum = format(date, "dd");
+  const dispatch = useDispatch();
   const periodFN = () => {
     const tempPeriod = format(date, "a");
     if (tempPeriod === "PM") {
@@ -23,6 +25,26 @@ function App() {
     }
   };
   const period = periodFN();
+
+  const getLocalData = () => {
+    return localStorage.getItem("todo-data");
+  };
+  const getLocalName = () => {
+    return localStorage.getItem("todo-name");
+  };
+  useEffect(() => {
+    if (getLocalData() !== null) {
+      dispatch(allCategory(JSON.parse(getLocalData()!)));
+    }
+    if (getLocalName() === null) {
+      setIsModalOpen(true);
+      dispatch(addName("Human"));
+    }
+
+    if (getLocalName() !== null) {
+      dispatch(addName(JSON.parse(getLocalName()!)));
+    }
+  }, []);
 
   return (
     <>

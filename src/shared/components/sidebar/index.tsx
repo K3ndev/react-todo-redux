@@ -1,7 +1,6 @@
 import { FormEvent, useRef } from "react";
 import DOMPurify from "dompurify";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store/todoStore";
 import donaAvatar from "../../../assets/dona_Avatar.svg";
 import {
@@ -66,8 +65,6 @@ export function Sidebar() {
       };
       dispatch(addCategory(newCategory));
       dispatch(changeIsUsed(newCategory));
-
-      // console.log(newCategory);
     }
     if (inputRef.current) {
       inputRef.current.value = "";
