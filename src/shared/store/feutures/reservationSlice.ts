@@ -75,6 +75,58 @@ export const reservationsSlice = createSlice({
       });
       localStorage.setItem("todo-data", JSON.stringify(state.categoryList));
     },
+    addList: (state, action: PayloadAction<todoListType>) => {
+      state.categoryList = state.categoryList.map((item: categoryType) => {
+        if (item.isUsed) {
+          return {
+            id: item.id,
+            categoryName: item.categoryName,
+            isUsed: true,
+            todoList: [...item.todoList, action.payload],
+          };
+        }
+        return item;
+      });
+      localStorage.setItem("todo-data", JSON.stringify(state.categoryList));
+    },
+    removeList: (state, action: PayloadAction<todoListType>) => {
+      state.categoryList = state.categoryList.map((item: categoryType) => {
+        if (item.isUsed === true) {
+          return {
+            id: item.id,
+            categoryName: item.categoryName,
+            isUsed: item.isUsed,
+            todoList: item.todoList.filter((item: todoListType) => {
+              return item.id !== action.payload.id;
+            }),
+          };
+        }
+        return item;
+      });
+      localStorage.setItem("todo-data", JSON.stringify(state.categoryList));
+    },
+    changeIsChecked: (state, action: PayloadAction<todoListType>) => {
+      state.categoryList = state.categoryList.map((item: categoryType) => {
+        if (item.isUsed === true) {
+          return {
+            id: item.id,
+            categoryName: item.categoryName,
+            isUsed: item.isUsed,
+            todoList: item.todoList.map((item: todoListType) => {
+              if (item.id === action.payload.id) {
+                return {
+                  id: item.id,
+                  isChecked: !item.isChecked,
+                  list: item.list,
+                };
+              } else return item;
+            }),
+          };
+        }
+        return item;
+      });
+      localStorage.setItem("todo-data", JSON.stringify(state.categoryList));
+    },
   },
 });
 
@@ -85,6 +137,9 @@ export const {
   addCategory,
   changeIsUsed,
   removeCategory,
+  addList,
+  removeList,
+  changeIsChecked,
 } = reservationsSlice.actions;
 
 export default reservationsSlice.reducer;

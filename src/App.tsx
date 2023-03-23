@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { useSelector, useDispatch } from "react-redux";
-import { ModalLogin, Sidebar } from "./shared/components/index";
+import { ModalLogin, Sidebar, TodoList } from "./shared/components/index";
 import { RootState } from "./shared/store/todoStore";
 import { addName, allCategory } from "./shared/store/feutures/reservationSlice";
 
@@ -66,7 +66,7 @@ function App() {
                 </div>
               </div>
             </div>
-            {/* <TodoList /> */}
+            <TodoList />
           </div>
         </section>
       </main>
