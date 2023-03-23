@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
-import { ModalLogin } from "./shared/components/index";
+import { ModalLogin, Sidebar } from "./shared/components/index";
 import { RootState } from "./shared/store/todoStore";
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
   const { name } = useSelector((state: RootState) => {
     return state.reservations;
   });
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const date = new Date();
   const day = format(date, "iiii");
   const month = format(date, "MMM");
@@ -28,7 +28,7 @@ function App() {
     <>
       {isModalOpen && <ModalLogin setIsModalOpen={setIsModalOpen} />}
       <main className="relative flex h-screen w-screen gap-7 bg-[#EAEDEE] p-10">
-        {/* <Sidebar /> */}
+        <Sidebar />
 
         <section className="flex h-[90vh] w-full flex-col items-center gap-7 lg:w-[66%]">
           <div className="flex w-full flex-col gap-4 md:w-[100%]">

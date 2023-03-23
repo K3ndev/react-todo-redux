@@ -39,14 +39,43 @@ export const reservationsSlice = createSlice({
   name: "reservations",
   initialState,
   reducers: {
-    addName: (state, action: PayloadAction<initialStateType["name"]>) => {
+    addName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
       localStorage.setItem("todo-name", JSON.stringify(state.name));
+    },
+    addCategory: (state, action: PayloadAction<categoryType>) => {
+      state.categoryList = [...state.categoryList, action.payload];
+      localStorage.setItem("todo-data", JSON.stringify(state.categoryList));
+    },
+    changeIsUsed: (state, action: PayloadAction<categoryType>) => {
+      state.categoryList = state.categoryList.map((item: categoryType) => {
+        if (action.payload.categoryName === item.categoryName) {
+          return {
+            id: item.id,
+            categoryName: item.categoryName,
+            isUsed: true,
+            todoList: item.todoList,
+          };
+        }
+        return {
+          id: item.id,
+          categoryName: item.categoryName,
+          isUsed: false,
+          todoList: item.todoList,
+        };
+      });
+      localStorage.setItem("todo-data", JSON.stringify(state.categoryList));
+    },
+    removeCategory: (state, action: PayloadAction<number>) => {
+      state.categoryList = state.categoryList.filter((item) => {
+        return action.payload !== item.id;
+      });
     },
   },
 });
 
 // exporting the methods
-export const { addName } = reservationsSlice.actions;
+export const { addName, addCategory, changeIsUsed, removeCategory } =
+  reservationsSlice.actions;
 
 export default reservationsSlice.reducer;
