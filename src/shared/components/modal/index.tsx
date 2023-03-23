@@ -4,6 +4,8 @@ import { createPortal } from "react-dom";
 import { useDispatch } from "react-redux";
 import { addName } from "../../store/feutures/reservationSlice";
 import modalLogo from "../../../assets/dona_Avatar.svg";
+import { auth, googleProvider } from "../../config/firebase";
+import { signInWithPopup, signOut } from "firebase/auth";
 
 type ModalLoginType = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,6 +46,23 @@ export function ModalLogin(props: ModalLoginType) {
     if (inputNameRef.current) {
       continueHandler();
       dispatch(addName(inputNameRef.current.value));
+    }
+  };
+
+  const firebaseHandler = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      // console.log(auth?.currentUser?.displayName);
+      if (auth.currentUser) {
+        dispatch(addName(auth.currentUser.displayName!.split(" ")[0]));
+        // addName(auth.currentUser.displayName!.split(" ")[0]);
+      }
+
+      // temp, we just need to get the name of the user
+      await signOut(auth);
+      continueHandler();
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -119,8 +138,7 @@ export function ModalLogin(props: ModalLoginType) {
                   <button
                     className="mb-7 flex items-center rounded-lg border bg-white py-3 px-6 text-sm text-[#008FFD] shadow-lg md:py-2 md:px-5"
                     onClick={() => {
-                      //   firebaseHandler();
-                      console.log("not available yet");
+                      firebaseHandler();
                     }}
                   >
                     <svg
