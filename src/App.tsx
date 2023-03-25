@@ -26,23 +26,23 @@ function App() {
   };
   const period = periodFN();
 
-  const getLocalData = () => {
-    return localStorage.getItem("todo-data");
-  };
-  const getLocalName = () => {
-    return localStorage.getItem("todo-name");
-  };
   useEffect(() => {
-    if (getLocalData() !== null) {
-      dispatch(allCategory(JSON.parse(getLocalData()!)));
-    }
-    if (getLocalName() === null) {
+    const todoDataLocal = localStorage.getItem("todo-data");
+    const todoNameLocal = localStorage.getItem("todo-name");
+
+    if (!todoNameLocal) {
       setIsModalOpen(true);
       dispatch(addName("Human"));
     }
+    if (todoNameLocal) {
+      dispatch(addName(JSON.parse(todoNameLocal)));
 
-    if (getLocalName() !== null) {
-      dispatch(addName(JSON.parse(getLocalName()!)));
+      if (JSON.parse(todoNameLocal) === "Human") {
+        setIsModalOpen(true);
+      }
+    }
+    if (todoDataLocal) {
+      dispatch(allCategory(JSON.parse(todoDataLocal)));
     }
   }, []);
 
